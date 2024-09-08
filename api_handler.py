@@ -1,3 +1,10 @@
-import requests
+import pybaseball
+import polars as pl
+import warnings
 
-base_url = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1'
+warnings.simplefilter('ignore')
+
+def statcast_polars(start_dt):
+    df = pl.from_pandas(pybaseball.statcast(start_dt))
+
+    return df

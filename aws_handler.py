@@ -1,4 +1,5 @@
 import boto3
+import s3fs
 
 
 def upload_file(file_name, s3_key):
@@ -14,3 +15,19 @@ def upload_file(file_name, s3_key):
     """
 
     s3_client = boto3.client('s3', region_name='us-east-2')
+
+
+def upload_df(df, destination):
+    """
+    Sends polars df to s3 bucket as a parquet
+
+    Parameters
+    ----------
+        df : polars.DataFrame
+            The data frame to be sent up
+        destination : str
+            The fully qualified file name in s3 that the data frame will be stored as
+    """
+    fs = s3fs.S3FileSystem()
+    with fs.open(destination, mode='wb') as output:
+        df.write_parquet(output)
